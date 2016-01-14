@@ -10,8 +10,8 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 	<!-- 自动扫描bean，把所有注解类转换成bean -->
-	<context:component-scan base-package="cn.wangxuchao.ycitlife.controller" />
-	<context:component-scan base-package="cn.wangxuchao.ycitlife.service" />
+	<context:component-scan base-package="cn.wangxuchao.ycitz.controller" />
+	<context:component-scan base-package="cn.wangxuchao.ycitz.service" />
 
 	<!-- 解决@ResponseBody中文乱码,要放到驱动器之前 -->
 	<bean
