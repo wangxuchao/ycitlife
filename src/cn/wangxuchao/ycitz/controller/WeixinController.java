@@ -1,5 +1,7 @@
 package cn.wangxuchao.ycitz.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -11,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.wangxuchao.ycitz.service.CoreService;
+import cn.wangxuchao.ycitz.util.MessageUtil;
 import cn.wangxuchao.ycitz.util.SignUtil;
 
 @Controller
 public class WeixinController {
-	
-	private static final Log logger = LogFactory
-			.getLog(WeixinController.class);
+
+	private static final Log logger = LogFactory.getLog(WeixinController.class);
 	@Autowired
 	private CoreService coreService;
 
@@ -44,15 +46,36 @@ public class WeixinController {
 		logger.info("--开始post请求校验");
 		// 请求校验
 		String signature = request.getParameter("signature");
-		String timestamp = request.getParameter("timestamp");
+		String timeStamp = request.getParameter("timestamp");
 		String nonce = request.getParameter("nonce");
 
-		// 如果校验成功
-		if (SignUtil.checkSignature(signature, timestamp, nonce)) {
-			String respXML = coreService.processRequest(request);
-			return respXML;
+		// 加解密类型
+		String encryptType = request.getParameter("encrypt_type");
+		try {
+			// 如果校验成功
+			if (SignUtil.checkSignature(signature, timeStamp, nonce)) {
+
+				HashMap<String, String> requestMap = null;
+
+				// 加解密模式
+				if ("aes".equals(encryptType)) {
+					requestMap = MessageUtil.parseXMLCrypt(request);
+					String respXML = coreService.process(requestMap);
+					// 加密
+					return MessageUtil.getWxCrypt().encryptMsg(respXML,
+							timeStamp, nonce);
+
+				}
+				// 明文模式
+				else {
+					requestMap = MessageUtil.parseXML(request);
+					String respXML = coreService.process(requestMap);
+					return respXML;
+				}
+			}
+		} catch (Exception e) {
+			logger.error("--POST请求校验失败");
 		}
-		logger.error("--POST请求校验失败");
 		return "";
 	}
 }

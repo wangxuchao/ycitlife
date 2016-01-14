@@ -1,5 +1,8 @@
 package cn.wangxuchao.ycitz.util;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
@@ -18,6 +22,8 @@ import cn.wangxuchao.ycitz.message.response.TextMessage;
 import cn.wangxuchao.ycitz.message.response.VideoMessage;
 import cn.wangxuchao.ycitz.message.response.VoiceMessage;
 
+import com.qq.weixin.mp.aes.AesException;
+import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
@@ -48,7 +54,29 @@ public class MessageUtil {
 	public static final String EVENT_TYPE_SUBSCRIBE = "subscribe";
 	public static final String EVENT_TYPE_UNSUBSCRIBE = "unsubscribe";
 
-	// 将请求中的xml转成map
+	/**
+	 * 获取微信加密实例
+	 * 
+	 * @return
+	 */
+	public static WXBizMsgCrypt getWxCrypt() {
+		WXBizMsgCrypt pc = null;
+		try {
+			pc = new WXBizMsgCrypt(SignUtil.token,
+					"fs5czIhPvMygRGgZFkJBQbt66ACMWlgeZUuyVib05rz",
+					"wx2f9d0874902bd829");
+		} catch (AesException e) {
+		}
+		return pc;
+	}
+
+	/**
+	 * 明文模式解析请求参数
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	public static HashMap<String, String> parseXML(HttpServletRequest request)
 			throws Exception {
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -56,6 +84,58 @@ public class MessageUtil {
 		// 通过IO获得Document
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(request.getInputStream());
+
+		// 得到XML根节点
+		Element root = doc.getRootElement();
+
+		recursiveParseXML(root, map);
+
+		return map;
+	}
+
+	/**
+	 * 加密或兼容模式解析请求参数
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	public static HashMap<String, String> parseXMLCrypt(
+			HttpServletRequest request) throws Exception {
+		HashMap<String, String> map = new HashMap<String, String>();
+
+		/**
+		 * 第1步：从InputStream中获取XML文本
+		 */
+		InputStream is = request.getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+		// 每次读取的内容
+		String line = null;
+		// 最终读取的内容
+		StringBuffer buffer = new StringBuffer();
+
+		while ((line = br.readLine()) != null) {
+			buffer.append(line);
+		}
+
+		br.close();
+		is.close();
+
+		/**
+		 * 第2步：解密
+		 */
+		String msgSignature = request.getParameter("msg_signature");
+		String timeStamp = request.getParameter("timestamp");
+		String nonce = request.getParameter("nonce");
+		WXBizMsgCrypt wxCrypt = MessageUtil.getWxCrypt();
+		String formXML = wxCrypt.decryptMsg(msgSignature, timeStamp, nonce,
+				buffer.toString());
+
+		/**
+		 * 第3步：解析XML，获取请求参数
+		 */
+		Document doc = DocumentHelper.parseText(formXML);
 
 		// 得到XML根节点
 		Element root = doc.getRootElement();

@@ -1,7 +1,7 @@
 package cn.wangxuchao.ycitz.service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 public interface CoreService {
-	String processRequest(HttpServletRequest request);
+	String process(HashMap<String, String> requestMap);
 }

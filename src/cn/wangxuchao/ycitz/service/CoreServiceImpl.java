@@ -22,7 +22,7 @@ public class CoreServiceImpl implements CoreService {
 	private BaiduMusicService baiduMusicService;
 
 	@Override
-	public String processRequest(HttpServletRequest request) {
+	public String process(HashMap<String, String> requestMap) {
 
 		String respXML = null;
 		// 默认返回的文本消息内容
@@ -31,7 +31,6 @@ public class CoreServiceImpl implements CoreService {
 
 		// 解析微信服务器发送的请求
 		try {
-			HashMap<String, String> requestMap = MessageUtil.parseXML(request);
 			// 用户的openID
 			String fromUserName = requestMap.get("FromUserName");
 			// 公众号的原始ID
@@ -133,7 +132,7 @@ public class CoreServiceImpl implements CoreService {
 		}
 		if (respXML == null) {
 			tm.setContent(respContent);
-			return MessageUtil.messageToXML(tm);
+			respXML = MessageUtil.messageToXML(tm);
 		}
 
 		return respXML;
