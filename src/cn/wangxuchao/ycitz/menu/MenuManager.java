@@ -23,64 +23,42 @@ public class MenuManager {
 	 */
 	private static Menu getMenu() {
 
+		// Click Button 示例
 		ClickButton btn11 = new ClickButton();
-		btn11.setName("免费加油");
+		btn11.setName("xxxx");
 		btn11.setType("click");
-		btn11.setKey("jiayou");
+		btn11.setKey("key1");
 
+		// View Button 示例
 		ViewButton btn21 = new ViewButton();
-		btn21.setName("爆款返场");
+		btn21.setName("xxxx");
 		btn21.setType("view");
-		btn21.setUrl("http://112.124.24.100/liantong/phone.html");
-
-		ViewButton btn22 = new ViewButton();
-		btn22.setName("号卡专区");
-		btn22.setType("view");
-		btn22.setUrl("http://112.124.24.100/liantong/talkcard.html");
-
-		ViewButton btn23 = new ViewButton();
-		btn23.setName("特惠机型");
-		btn23.setType("view");
-		btn23.setUrl("http://112.124.24.100/liantong/store.html");
-
-		ViewButton btn24 = new ViewButton();
-		btn24.setName("4G上网");
-		btn24.setType("view");
-		btn24.setUrl("http://112.124.24.100/liantong/datecard.html");
-
-		ViewButton btn31 = new ViewButton();
-		btn31.setName("我要查询");
-		btn31.setType("view");
-		btn31.setUrl("http://wap.10010.com");
-
-		ClickButton btn33 = new ClickButton();
-		btn33.setName("在线咨询");
-		btn33.setType("click");
-		btn33.setKey("zixun");
+		btn21.setUrl("http://www.example.com");
 
 		ComplexButton mainBtn1 = new ComplexButton();
-		mainBtn1.setName("最新活动");
+		mainBtn1.setName("xxxx");
 		mainBtn1.setSub_button(new BaseButton[] { btn11 });
 
 		ComplexButton mainBtn2 = new ComplexButton();
-		mainBtn2.setName("联通商城");
-		mainBtn2.setSub_button(new BaseButton[] { btn21, btn22, btn24, btn23 });
+		mainBtn2.setName("xxxx");
+		mainBtn2.setSub_button(new BaseButton[] { btn21 });
 
-		ComplexButton mainBtn3 = new ComplexButton();
-		mainBtn3.setName("我的服务");
-		mainBtn3.setSub_button(new BaseButton[] { btn31, btn33 });
+		// ComplexButton mainBtn3 = new ComplexButton();
+		// mainBtn3.setName("xxxx");
+		// mainBtn3.setSub_button(new BaseButton[] { btn31, btn32, btn33, btn34,
+		// btn35 });
 
 		Menu menu = new Menu();
-		menu.setButton(new BaseButton[] { mainBtn1, mainBtn2, mainBtn3 });
+		menu.setButton(new BaseButton[] { mainBtn1, mainBtn2 });
 
 		return menu;
 	}
 
 	public static void main(String[] args) {
 		// 第三方用户唯一凭证
-		String appId = "wx5d2524ead18e4d17";
+		String appId = "xxxxxxxxxxxxxxxxxx";
 		// 第三方用户唯一凭证密钥
-		String appSecret = "b0b51ec9b1e4bbc682cdf129ba96f67f ";
+		String appSecret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 		// 调用接口获取凭证
 		Token token = CommonUtil.getToken(appId, appSecret);
