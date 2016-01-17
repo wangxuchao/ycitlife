@@ -29,7 +29,7 @@ import cn.wangxuchao.ycitz.model.IndexNews;
 @Controller
 @RequestMapping("/api")
 public class NewsApi {
-	private static final Log logger = LogFactory.getLog(NewsController.class);
+	private static final Log logger = LogFactory.getLog(NewsApi.class);
 
 	@Autowired
 	private IndexNewsDao indexNewsDao;
