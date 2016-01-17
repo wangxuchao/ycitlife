@@ -18,6 +18,8 @@ public class CoreServiceImpl implements CoreService {
 	private TodayInHistoryService todayInHistoryService;
 	@Autowired
 	private BaiduMusicService baiduMusicService;
+	@Autowired
+	private FaceService faceService;
 
 	@Override
 	public String process(HashMap<String, String> requestMap) {
@@ -89,7 +91,10 @@ public class CoreServiceImpl implements CoreService {
 			}
 			// 图片消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
-				respContent = "您发送的是图片消息！";
+				// 取得图片地址
+				String picUrl = requestMap.get("PicUrl");
+				// 人脸检测
+				respContent = faceService.detect(picUrl);
 			}
 			// 链接消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_LINK)) {
