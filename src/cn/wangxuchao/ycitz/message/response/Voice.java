@@ -5,14 +5,14 @@ package cn.wangxuchao.ycitz.message.response;
  */
 public class Voice {
 
-    // 媒体文件id
-    private String MediaId;
+	// 媒体文件id
+	private String MediaId;
 
-    public String getMediaId() {
-        return MediaId;
-    }
+	public String getMediaId() {
+		return MediaId;
+	}
 
-    public void setMediaId(String mediaId) {
-        MediaId = mediaId;
-    }
+	public void setMediaId(String mediaId) {
+		MediaId = mediaId;
+	}
 }

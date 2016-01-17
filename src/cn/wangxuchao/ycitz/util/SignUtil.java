@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 public class SignUtil {
-	public static String token = "wangxuchao";
+	public static String token = "xxxxxxxx";
 
 	public static boolean checkSignature(String signature, String timestamp,
 			String nonce) {
