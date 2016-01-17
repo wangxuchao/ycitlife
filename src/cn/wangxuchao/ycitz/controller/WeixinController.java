@@ -24,9 +24,9 @@ public class WeixinController {
 	private CoreService coreService;
 
 	// 处理GET请求
-	@RequestMapping(value = "weixin", method = RequestMethod.GET)
+	@RequestMapping(value = "/weixin", method = RequestMethod.GET)
 	public @ResponseBody String doGet(HttpServletRequest request) {
-		logger.info("--开始GET请求校验");
+		logger.info("开始GET请求校验");
 		String signature = request.getParameter("signature");
 		String timestamp = request.getParameter("timestamp");
 		String nonce = request.getParameter("nonce");
@@ -36,14 +36,14 @@ public class WeixinController {
 		if (SignUtil.checkSignature(signature, timestamp, nonce)) {
 			return echostr;
 		}
-		logger.error("--GET请求校验失败");
+		logger.error("GET请求校验失败");
 		return "";
 	}
 
 	// 处理POST请求
-	@RequestMapping(value = "weixin", method = RequestMethod.POST)
+	@RequestMapping(value = "/weixin", method = RequestMethod.POST)
 	public @ResponseBody String doPost(HttpServletRequest request) {
-		logger.info("--开始post请求校验");
+		logger.info("开始post请求校验");
 		// 请求校验
 		String signature = request.getParameter("signature");
 		String timeStamp = request.getParameter("timestamp");
@@ -74,7 +74,7 @@ public class WeixinController {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("--POST请求校验失败");
+			logger.error("POST请求校验失败");
 		}
 		return "";
 	}
