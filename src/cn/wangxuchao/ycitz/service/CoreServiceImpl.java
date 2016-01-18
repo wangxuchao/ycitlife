@@ -2,24 +2,36 @@ package cn.wangxuchao.ycitz.service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.wangxuchao.ycitz.dao.UserLocationDao;
+import cn.wangxuchao.ycitz.message.response.Article;
 import cn.wangxuchao.ycitz.message.response.Music;
 import cn.wangxuchao.ycitz.message.response.MusicMessage;
+import cn.wangxuchao.ycitz.message.response.NewsMessage;
 import cn.wangxuchao.ycitz.message.response.TextMessage;
+import cn.wangxuchao.ycitz.model.BaiduPlace;
+import cn.wangxuchao.ycitz.model.UserLocation;
 import cn.wangxuchao.ycitz.util.MessageUtil;
 
 @Service
 public class CoreServiceImpl implements CoreService {
-
+	private static final Log logger = LogFactory.getLog(CoreServiceImpl.class);
 	@Autowired
 	private TodayInHistoryService todayInHistoryService;
 	@Autowired
 	private BaiduMusicService baiduMusicService;
 	@Autowired
 	private FaceService faceService;
+	@Autowired
+	private UserLocationDao userLocationDao;
+	@Autowired
+	private BaiduMapService baiduMapService;
 
 	@Override
 	public String process(HashMap<String, String> requestMap) {
@@ -48,6 +60,7 @@ public class CoreServiceImpl implements CoreService {
 			if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
 				String content = requestMap.get("Content");
 				if (content.equals("历史上的今天") || content.equals("2")) {
+					logger.info("调用历史上的今天");
 					String url = "http://www.rijiben.com/";
 					respContent = todayInHistoryService
 							.getTodayInHistoryInfo(url);
@@ -67,6 +80,7 @@ public class CoreServiceImpl implements CoreService {
 						if (2 == kwArr.length) {
 							musicAuthor = kwArr[1];
 						}
+						logger.info("搜索歌曲：" + musicTitle + ":" + musicAuthor);
 						// 搜索音乐
 						Music music = baiduMusicService.searchMusic(musicTitle,
 								musicAuthor);
@@ -83,6 +97,46 @@ public class CoreServiceImpl implements CoreService {
 									.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_MUSIC);
 							musicMessage.setMusic(music);
 							respXML = MessageUtil.messageToXML(musicMessage);
+						}
+					}
+				} else if (content.equals("附近")) {
+					respContent = "请输入附近+地点来搜索";
+				}// 周边搜索
+				else if (content.startsWith("附近")) {
+					String keyWord = content.replaceAll("附近", "").trim();
+					logger.info("附近搜索：" + keyWord);
+					// 获取用户最后一次发送的地理位置
+					UserLocation userLocation = userLocationDao
+							.getLastLocation(fromUserName);
+					// 未获取到
+					if (null == userLocation) {
+						logger.info("附近搜索未搜索到：" + keyWord);
+						respContent = getUsageLocation();
+					} else {
+						// 根据转换后（纠偏）的坐标搜索周边POI
+						List<BaiduPlace> placeList = baiduMapService
+								.searchPlace(keyWord,
+										userLocation.getBd09Lng(),
+										userLocation.getBd09Lat());
+						// 未搜索到POI
+						if (null == placeList || 0 == placeList.size()) {
+							respContent = String.format(
+									"/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
+						} else {
+							List<Article> articleList = baiduMapService
+									.makeArticleList(placeList,
+											userLocation.getBd09Lng(),
+											userLocation.getBd09Lat());
+							// 回复图文消息
+							NewsMessage newsMessage = new NewsMessage();
+							newsMessage.setToUserName(fromUserName);
+							newsMessage.setFromUserName(toUserName);
+							newsMessage.setCreateTime(new Date().getTime());
+							newsMessage
+									.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
+							newsMessage.setArticles(articleList);
+							newsMessage.setArticleCount(articleList.size());
+							respXML = MessageUtil.messageToXML(newsMessage);
 						}
 					}
 				} else {
@@ -102,7 +156,37 @@ public class CoreServiceImpl implements CoreService {
 			}
 			// 地理位置消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) {
-				respContent = "您发送的是地理位置消息！";
+				logger.info("获取用户发过来的位置");
+				// 用户发送的经纬度
+				String lng = requestMap.get("Location_Y");
+				String lat = requestMap.get("Location_X");
+				// 坐标转换后的经纬度
+				String bd09Lng = null;
+				String bd09Lat = null;
+				// 调用接口转换坐标
+				UserLocation userLocation = baiduMapService.convertCoord(lng,
+						lat);
+				if (null != userLocation) {
+					bd09Lng = userLocation.getBd09Lng();
+					bd09Lat = userLocation.getBd09Lat();
+				}
+				// 保存用户地理位置
+				UserLocation ul = new UserLocation();
+				ul.setOpenId(fromUserName);
+				ul.setLng(lng);
+				ul.setLat(lat);
+				ul.setBd09Lng(bd09Lng);
+				ul.setBd09Lat(bd09Lat);
+				userLocationDao.add(ul);
+
+				StringBuilder buffer = new StringBuilder();
+				buffer.append("[愉快]").append("成功接收您的位置！").append("\n\n");
+				buffer.append("您可以输入搜索关键词获取周边信息了，例如：").append("\n");
+				buffer.append("        附近ATM").append("\n");
+				buffer.append("        附近KTV").append("\n");
+				buffer.append("        附近厕所").append("\n");
+				buffer.append("必须以“附近”两个字开头！");
+				respContent = buffer.toString();
 			}
 			// 视频消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_VIDEO)) {
@@ -139,5 +223,20 @@ public class CoreServiceImpl implements CoreService {
 		}
 
 		return respXML;
+	}
+
+	/**
+	 * 周边搜索使用说明
+	 *
+	 * @return
+	 */
+	private static String getUsageLocation() {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("周边搜索使用说明").append("\n\n");
+		buffer.append("1）发送地理位置").append("\n");
+		buffer.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n\n");
+		buffer.append("2）指定关键词搜索").append("\n");
+		buffer.append("格式：附近+关键词\n例如：附近ATM、附近KTV、附近厕所");
+		return buffer.toString();
 	}
 }
