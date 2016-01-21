@@ -1,5 +1,8 @@
 package cn.wangxuchao.ycitz.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -44,6 +47,30 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 			return html;
 		} catch (Exception e) {
 			logger.error("捕捉到异常：" + e.getMessage());
+			return "{\"error\":\"code:0x000000\"}";
+		}
+	}
+
+	@Override
+	public String getNewsList(int smallid) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("sqlstring",
+				"select id,Title,Author,com,AddTime,SmallID from Article where IsPass='1' and SmallID='"
+						+ smallid + "' order by AddTime desc");
+		try {
+			String html = HttpClientUtil.httpPost("http://www.ycit.cn/s.do",
+					map);
+			if (html.startsWith("error")) {
+				logger.info("新闻列表获取失败");
+				return html;
+			}
+			// 去除多余部分
+			html = html.replaceAll("\\{adminTab:\\{records:", "").replaceAll(
+					"\\}\\}", "");
+
+			return html;
+		} catch (Exception e) {
+			logger.error("获取新闻列表时捕捉到异常：" + e.getMessage());
 			return "{\"error\":\"code:0x000000\"}";
 		}
 	}
