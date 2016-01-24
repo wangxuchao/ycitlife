@@ -17,8 +17,11 @@ public class MapController {
 	private static final Log logger = LogFactory.getLog(MapController.class);
 
 	@RequestMapping(value = "/route", method = RequestMethod.GET)
-	public ModelAndView getRoute(@RequestParam String p1,
-			@RequestParam String p2) {
+	public ModelAndView getRoute(@RequestParam(required = false) String p1,
+			@RequestParam(required = false) String p2) {
+		if (p1 == null || p2 == null) {
+			return new ModelAndView("error");
+		}
 		logger.info("显示路径");
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("p1", p1);
