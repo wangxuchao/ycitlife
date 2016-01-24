@@ -74,4 +74,44 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 			return "{\"error\":\"code:0x000000\"}";
 		}
 	}
+
+	@Override
+	public String getNewsInfo(int id, int smallid) {
+		try {
+			String html = HttpClientUtil.httpGet(indexUrl
+					+ "ShowNews.jsp?id="+id+"&smallid="+smallid);
+			if (html.startsWith("error")) {
+				logger.info("获取学校新闻id:" + id + ",smallid:" + smallid + "失败");
+				return html;
+			}
+			// 去除多余部分
+			html = html
+					.replaceAll(
+							"<!DOCTYPE html[\\w\\W]*valign=\"top\">|<div class=\"page04_bottom_left\">[\\w\\W]*",
+							"")
+					.replaceAll("<p", "p_tag_temp_start<P")
+					.replaceAll("</p>", "</p>p_tag_temp_end")
+					.replaceAll("<P", "p_tag_temp_start<P")
+					.replaceAll("</P>", "</P>p_tag_temp_end")
+					.replaceAll("src=\"", ">img_tag_temp_start src=\"")
+					.replaceAll("href=\"", ">a_tag_temp_start href=\"")
+					.replaceAll("</?[a-zA-Z]+[^><]*>", "")
+					.replaceAll("&nbsp;|\\.\\.\\.| |	", "")
+					.replaceAll("\\n(\\s*\\n)+", "\n")
+					.replaceAll("(^\\s*)|(\\s*$)","")
+					.replaceAll("\\r\\n", "\n")
+					.replaceAll("p_tag_temp_start", "<p>")
+					.replaceAll("p_tag_temp_end", "</p>")
+					.replaceAll("img_tag_temp_start", "<img ")
+					.replaceAll("a_tag_temp_start", "<a ")
+					.replaceAll("src=\"/uploads", "src=\""+indexUrl+"uploads")
+					.replaceAll("src=\"/admin", "src=\""+indexUrl+"admin")
+					.replaceAll("href=\"/uploads", "href=\""+indexUrl+"uploads")
+					.replaceAll("href=\"/admin", "href=\""+indexUrl+"admin");
+			return html;
+		} catch (Exception e) {
+			logger.error("获取新闻内容时捕捉到异常：" + e.getMessage());
+			return "{\"error\":\"code:0x000000\"}";
+		}
+	}
 }

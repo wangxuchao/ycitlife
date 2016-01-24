@@ -2,9 +2,7 @@ package cn.wangxuchao.ycitz.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,11 +18,12 @@ import com.google.gson.reflect.TypeToken;
 
 import cn.wangxuchao.ycitz.dao.IndexNewsDao;
 import cn.wangxuchao.ycitz.dao.SchoolNewsDao;
+import cn.wangxuchao.ycitz.dao.SchoolNewsInfoDao;
 import cn.wangxuchao.ycitz.model.IndexNews;
 import cn.wangxuchao.ycitz.model.SchoolNews;
+import cn.wangxuchao.ycitz.model.SchoolNewsInfo;
 import cn.wangxuchao.ycitz.model.SchoolNewsJson;
 import cn.wangxuchao.ycitz.service.SchoolNewsService;
-import cn.wangxuchao.ycitz.util.HttpClientUtil;
 
 @Controller
 public class NewsController {
@@ -36,6 +35,8 @@ public class NewsController {
 	private IndexNewsDao indexNewsDao;
 	@Autowired
 	private SchoolNewsDao schoolNewsDao;
+	@Autowired
+	private SchoolNewsInfoDao schoolNewsInfoDao;
 
 	@RequestMapping(value = "/getSchoolIndexNews", method = RequestMethod.GET)
 	public @ResponseBody String getSchoolIndexNews() {
@@ -93,6 +94,34 @@ public class NewsController {
 				schoolNewsDao.add(schoolNews);
 			}
 
+			return "{\"result\":\"success\"}";
+		}
+	}
+
+	@RequestMapping(value = "/getSchoolNewsInfo", method = RequestMethod.GET)
+	public @ResponseBody String getSchoolNewsInfo(@RequestParam int id,
+			@RequestParam int smallid) {
+
+		String[] htmlArry = schoolNewsService.getNewsInfo(id, smallid).split(
+				"\\n");
+
+		// 判断获取是否成功
+		if (htmlArry[0].startsWith("{") || htmlArry[0].startsWith("error")) {
+			return "{\"error\":\"code:0x000002\"}";
+		} else {
+			int count = htmlArry.length;
+			SchoolNewsInfo schoolNewsInfo = new SchoolNewsInfo();
+			schoolNewsInfo.setId(id);
+			schoolNewsInfo.setSmallid(smallid);
+			String newsinfo = "";
+			for (int i = 0; i < count - 1; i++) {
+				newsinfo = newsinfo + htmlArry[i];
+			}
+			schoolNewsInfo.setNewsinfo(newsinfo);
+			schoolNewsInfo
+					.setZeren(htmlArry[count - 1].replaceAll("责任编辑：", ""));
+			schoolNewsInfoDao.add(schoolNewsInfo);
+			
 			return "{\"result\":\"success\"}";
 		}
 	}

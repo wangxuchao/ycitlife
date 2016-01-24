@@ -6,7 +6,9 @@ public interface SchoolNewsService {
 	 * 
 	 * @return String 新闻列表信息
 	 */
-	public String getIndexHtml();
-	
-	public String getNewsList(int smallid);
+	String getIndexHtml();
+
+	String getNewsList(int smallid);
+
+	String getNewsInfo(int id, int smallid);
 }
