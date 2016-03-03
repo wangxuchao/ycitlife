@@ -11,6 +11,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -33,6 +34,11 @@ public class HttpClientUtil {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpGet httpget = new HttpGet(url);
+
+			// 设置请求和传输超时时间
+			RequestConfig requestConfig = RequestConfig.custom()
+					.setSocketTimeout(10000).setConnectTimeout(10000).build();
+			httpget.setConfig(requestConfig);
 			ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
 				@Override
 				public String handleResponse(final HttpResponse response)
@@ -43,12 +49,14 @@ public class HttpClientUtil {
 						return entity != null ? EntityUtils.toString(entity)
 								: null;
 					} else {
-						return "{\"error\":\"code:0x000" + status + "\"}";
+						return "error:code:0x000" + status;
 					}
 				}
 			};
 			String responseBody = httpclient.execute(httpget, responseHandler);
 			return responseBody;
+		} catch (Exception e) {
+			return "error:连接超时";
 		} finally {
 			httpclient.close();
 		}
@@ -78,6 +86,11 @@ public class HttpClientUtil {
 					Consts.UTF_8);
 			HttpPost httppost = new HttpPost(url);
 			httppost.setEntity(entity);
+			
+			// 设置请求和传输超时时间
+			RequestConfig requestConfig = RequestConfig.custom()
+					.setSocketTimeout(10000).setConnectTimeout(10000).build();
+			httppost.setConfig(requestConfig);
 
 			// Create a custom response handler
 			ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -90,7 +103,7 @@ public class HttpClientUtil {
 						return entity != null ? EntityUtils.toString(entity)
 								: null;
 					} else {
-						return "{\"error\":\"code:0x000" + status + "\"}";
+						return "error:code:0x000" + status;
 					}
 				}
 			};
