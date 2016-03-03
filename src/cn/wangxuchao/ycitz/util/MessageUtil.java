@@ -14,13 +14,13 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import cn.wangxuchao.ycitz.message.response.Article;
-import cn.wangxuchao.ycitz.message.response.ImageMessage;
-import cn.wangxuchao.ycitz.message.response.MusicMessage;
-import cn.wangxuchao.ycitz.message.response.NewsMessage;
-import cn.wangxuchao.ycitz.message.response.TextMessage;
-import cn.wangxuchao.ycitz.message.response.VideoMessage;
-import cn.wangxuchao.ycitz.message.response.VoiceMessage;
+import cn.wangxuchao.ycitz.model.weixin.message.response.Article;
+import cn.wangxuchao.ycitz.model.weixin.message.response.ImageMessage;
+import cn.wangxuchao.ycitz.model.weixin.message.response.MusicMessage;
+import cn.wangxuchao.ycitz.model.weixin.message.response.NewsMessage;
+import cn.wangxuchao.ycitz.model.weixin.message.response.TextMessage;
+import cn.wangxuchao.ycitz.model.weixin.message.response.VideoMessage;
+import cn.wangxuchao.ycitz.model.weixin.message.response.VoiceMessage;
 
 import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;

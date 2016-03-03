@@ -18,7 +18,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import cn.wangxuchao.ycitz.model.Token;
+import cn.wangxuchao.ycitz.model.weixin.Token;
 
 /**
  * 通用工具类

@@ -3,7 +3,7 @@ package cn.wangxuchao.ycitz.menu;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import cn.wangxuchao.ycitz.model.Token;
+import cn.wangxuchao.ycitz.model.weixin.Token;
 import cn.wangxuchao.ycitz.util.CommonUtil;
 import cn.wangxuchao.ycitz.util.MenuUtil;
 

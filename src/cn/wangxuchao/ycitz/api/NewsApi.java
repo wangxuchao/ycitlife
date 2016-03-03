@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.wangxuchao.ycitz.dao.IndexNewsDao;
-import cn.wangxuchao.ycitz.dao.SchoolNewsDao;
-import cn.wangxuchao.ycitz.dao.SchoolNewsInfoDao;
-import cn.wangxuchao.ycitz.model.IndexNews;
-import cn.wangxuchao.ycitz.model.SchoolNews;
-import cn.wangxuchao.ycitz.model.SchoolNewsInfo;
+import cn.wangxuchao.ycitz.dao.schoolnews.IndexNewsDao;
+import cn.wangxuchao.ycitz.dao.schoolnews.SchoolNewsDao;
+import cn.wangxuchao.ycitz.dao.schoolnews.SchoolNewsInfoDao;
+import cn.wangxuchao.ycitz.model.schoolnews.IndexNews;
+import cn.wangxuchao.ycitz.model.schoolnews.SchoolNews;
+import cn.wangxuchao.ycitz.model.schoolnews.SchoolNewsInfo;
 
 import com.google.gson.Gson;
 
