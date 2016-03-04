@@ -1,6 +1,10 @@
 package cn.wangxuchao.ycitz.util;
 
 public class ValueUtil {
+	
+	//项目根路径
+	public static final String PROJECT_ROOT = "http://120.26.114.9/ycitz/";
+	
 	//百度地图服务端AK
 	public static final String BAIDU_MAP_API_SERVER_AK = "Tq9pcf3vf0phV8Svd6O5Apwn";
 	//百度地图浏览器端AK

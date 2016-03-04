@@ -166,7 +166,7 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 
 	@Override
 	public List<SchoolNewsDetail> getSchoolNewsDetail(int id, int smallid) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	

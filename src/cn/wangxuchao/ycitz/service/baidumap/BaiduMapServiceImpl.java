@@ -113,7 +113,7 @@ public class BaiduMapServiceImpl implements BaiduMapService {
 	public List<Article> makeArticleList(List<BaiduPlace> placeList,
 			String bd09Lng, String bd09Lat) {
 		// 项目的根路径
-		String basePath = "http://120.26.114.9/ycitz/";
+		String basePath = ValueUtil.PROJECT_ROOT;
 		List<Article> list = new ArrayList<Article>();
 		BaiduPlace place = null;
 		logger.info("组装地点的图文消息");
