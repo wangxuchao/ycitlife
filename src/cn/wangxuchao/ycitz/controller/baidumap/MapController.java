@@ -20,7 +20,7 @@ public class MapController {
 	public ModelAndView getRoute(@RequestParam(required = false) String p1,
 			@RequestParam(required = false) String p2) {
 		if (p1 == null || p2 == null) {
-			return new ModelAndView("error");
+			return new ModelAndView("error/error");
 		}
 		logger.info("显示路径");
 		Map<String, String> map = new HashMap<String, String>();

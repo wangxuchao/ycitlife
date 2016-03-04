@@ -1,4 +1,4 @@
-package cn.wangxuchao.ycitz.model.schoolnews;
+package cn.wangxuchao.ycitz.model.indexnews;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
