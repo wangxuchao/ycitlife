@@ -22,13 +22,12 @@ import cn.wangxuchao.ycitz.model.schoolnews.SchoolNews;
 import cn.wangxuchao.ycitz.model.schoolnews.SchoolNewsInfo;
 import cn.wangxuchao.ycitz.model.schoolnews.SchoolNewsJson;
 import cn.wangxuchao.ycitz.util.HttpClientUtil;
+import cn.wangxuchao.ycitz.util.ValueUtil;
 
 @Service
 public class SchoolNewsServiceImpl implements SchoolNewsService {
 	private static final Log logger = LogFactory
 			.getLog(SchoolNewsServiceImpl.class);
-	// 学校首页链接
-	private static final String indexUrl = "http://www.ycit.cn/";
 
 	@Autowired
 	private IndexNewsDao indexNewsDao;
@@ -44,11 +43,20 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 	 */
 	@Override
 	public String getSchoolIndexNews() {
+		String url = ValueUtil.YCIT_HOME_PAGE;
 		try {
-			String html = HttpClientUtil.httpGet(indexUrl);
+			// get请求获取学校首页html
+			String html = HttpClientUtil.httpGet(url);
+
 			if (html.startsWith("error")) {
-				logger.info("学校首页新闻获取失败");
-				return html;
+				// 改用备用地址
+				url = ValueUtil.YCIT_HOME_PAGE_BACKUP;
+				// get请求获取学校首页html
+				html = HttpClientUtil.httpGet(url);
+				if (html.startsWith("error")) {
+					logger.info("学校首页新闻获取失败");
+					return html;
+				}
 			}
 			// 去除多余部分
 			html = html
@@ -95,16 +103,21 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 
 	@Override
 	public String getNewsList(int smallid) {
+		String url = ValueUtil.YCIT_HOME_PAGE;
+
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("sqlstring",
 				"select id,Title,Author,com,AddTime,SmallID from Article where IsPass='1' and SmallID='"
 						+ smallid + "' order by AddTime desc");
 		try {
-			String html = HttpClientUtil.httpPost("http://www.ycit.cn/s.do",
-					map);
+			String html = HttpClientUtil.httpPost(url + "s.do", map);
 			if (html.startsWith("error")) {
-				logger.info("新闻列表获取失败");
-				return html;
+				url = ValueUtil.YCIT_HOME_PAGE_BACKUP;
+				html = HttpClientUtil.httpPost(url + "s.do", map);
+				if (html.startsWith("error")) {
+					logger.info("新闻列表获取失败");
+					return html;
+				}
 			}
 			// 去除多余部分
 			html = html.replaceAll("\\{adminTab:\\{records:", "").replaceAll(
@@ -130,7 +143,7 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 								.getAddTime()));
 					} catch (ParseException e) {
 						logger.error("时间格式转换错误");
-						return "error:0x000000}";
+						return "error:0x000000";
 					}
 					schoolNews.setSmallid(schoolNewsJson.getSmallID());
 					schoolNewsDao.add(schoolNews);
@@ -146,12 +159,18 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 
 	@Override
 	public String getNewsInfo(int id, int smallid) {
+		String url = ValueUtil.YCIT_HOME_PAGE;
 		try {
-			String html = HttpClientUtil.httpGet(indexUrl + "ShowNews.jsp?id="
-					+ id + "&smallid=" + smallid);
+			String html = HttpClientUtil.httpGet(url + "ShowNews.jsp?id=" + id
+					+ "&smallid=" + smallid);
 			if (html.startsWith("error")) {
-				logger.info("获取学校新闻id:" + id + ",smallid:" + smallid + "失败");
-				return html;
+				url = ValueUtil.YCIT_HOME_PAGE_BACKUP;
+				html = HttpClientUtil.httpGet(url + "ShowNews.jsp?id=" + id
+						+ "&smallid=" + smallid);
+				if (html.startsWith("error")) {
+					logger.info("获取学校新闻id:" + id + ",smallid:" + smallid + "失败");
+					return html;
+				}
 			}
 			// 去除多余部分
 			html = html
@@ -174,11 +193,13 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 					.replaceAll("img_tag_temp_start", "<img ")
 					.replaceAll("a_tag_temp_start", "<a ")
 					.replaceAll("src=\"/uploads",
-							"src=\"" + indexUrl + "uploads")
-					.replaceAll("src=\"/admin", "src=\"" + indexUrl + "admin")
+							"src=\"" + ValueUtil.YCIT_HOME_PAGE + "uploads")
+					.replaceAll("src=\"/admin",
+							"src=\"" + ValueUtil.YCIT_HOME_PAGE + "admin")
 					.replaceAll("href=\"/uploads",
-							"href=\"" + indexUrl + "uploads")
-					.replaceAll("href=\"/admin", "href=\"" + indexUrl + "admin");
+							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "uploads")
+					.replaceAll("href=\"/admin",
+							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "admin");
 
 			String[] htmlArry = html.split("\\n");
 

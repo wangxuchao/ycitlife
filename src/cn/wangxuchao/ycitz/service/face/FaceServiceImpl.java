@@ -12,6 +12,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import cn.wangxuchao.ycitz.model.face.Face;
 import cn.wangxuchao.ycitz.util.HttpClientUtil;
+import cn.wangxuchao.ycitz.util.ValueUtil;
 
 @Service
 public class FaceServiceImpl implements FaceService {
@@ -32,10 +33,9 @@ public class FaceServiceImpl implements FaceService {
 			// 对URL进行编码
 			queryUrl = queryUrl.replace("URL",
 					java.net.URLEncoder.encode(picUrl, "UTF-8"));
-			queryUrl = queryUrl.replace("API_KEY",
-					"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-			queryUrl = queryUrl.replace("API_SECRET",
-					"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+			queryUrl = queryUrl.replace("API_KEY", ValueUtil.FACE_API_KEY);
+			queryUrl = queryUrl
+					.replace("API_SECRET", ValueUtil.FACE_API_SECRET);
 
 			logger.info("调用人脸检测接口");
 			// 调用人脸检测接口

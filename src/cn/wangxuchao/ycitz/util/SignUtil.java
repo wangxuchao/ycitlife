@@ -4,14 +4,14 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 public class SignUtil {
-	public static String token = "xxxxxxxx";
 
 	public static boolean checkSignature(String signature, String timestamp,
 			String nonce) {
 		boolean result = false;
 
 		// 对token、timestamp和nonce按字典排序
-		String[] array = new String[] { token, timestamp, nonce };
+		String[] array = new String[] { ValueUtil.WEIXIN_TOKEN, timestamp,
+				nonce };
 		Arrays.sort(array);
 
 		// 将三个参数字符串拼接成一个字符串

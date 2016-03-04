@@ -20,6 +20,7 @@ import cn.wangxuchao.ycitz.model.baidumap.BaiduPlace;
 import cn.wangxuchao.ycitz.model.baidumap.UserLocation;
 import cn.wangxuchao.ycitz.model.weixin.message.response.Article;
 import cn.wangxuchao.ycitz.util.HttpClientUtil;
+import cn.wangxuchao.ycitz.util.ValueUtil;
 
 @Service
 public class BaiduMapServiceImpl implements BaiduMapService {
@@ -30,11 +31,13 @@ public class BaiduMapServiceImpl implements BaiduMapService {
 	public List<BaiduPlace> searchPlace(String query, String lng, String lat)
 			throws Exception {
 		// 拼装请求地址
-		String requestUrl = "http://api.map.baidu.com/place/v2/search?&query=QUERY&location=LAT,LNG&radius=2000&output=xml&scope=2&page_size=10&page_num=0&ak=xxxxxxxxxxxxxxxxxxxxxxxx";
+		String requestUrl = "http://api.map.baidu.com/place/v2/search?&query=QUERY&location=LAT,LNG&radius=2000&output=xml&scope=2&page_size=10&page_num=0&ak=AK";
 		requestUrl = requestUrl.replace("QUERY",
 				URLEncoder.encode(query, "UTF-8"));
 		requestUrl = requestUrl.replace("LAT", lat);
 		requestUrl = requestUrl.replace("LNG", lng);
+		requestUrl = requestUrl
+				.replace("AK", ValueUtil.BAIDU_MAP_API_SERVER_AK);
 		logger.info("调用Place API圆形区域检索");
 		// 调用Place API圆形区域检索
 		String respXml = HttpClientUtil.httpGet(requestUrl);

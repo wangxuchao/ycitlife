@@ -62,9 +62,8 @@ public class MessageUtil {
 	public static WXBizMsgCrypt getWxCrypt() {
 		WXBizMsgCrypt pc = null;
 		try {
-			pc = new WXBizMsgCrypt(SignUtil.token,
-					"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-					"xxxxxxxxxxxxxxxxxx");
+			pc = new WXBizMsgCrypt(ValueUtil.WEIXIN_TOKEN,
+					ValueUtil.WEIXIN_ENCODINGAESKEY, ValueUtil.WEIXIN_APPID);
 		} catch (AesException e) {
 		}
 		return pc;

@@ -1,3 +1,4 @@
+<%@page import="cn.wangxuchao.ycitz.util.ValueUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -17,7 +18,7 @@ body, html, #allmap {
 }
 </style>
 <script type="text/javascript"
-	src="http://api.map.baidu.com/api?v=2.0&ak=xxxxxxxxxxxxxxxxxxxxxxxx"></script>
+	src="http://api.map.baidu.com/api?v=2.0&ak=<%=ValueUtil.BAIDU_MAP_API_BROWSER_AK%>"></script>
 </head>
 <body>
 	<div id="allmap"></div>
