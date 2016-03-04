@@ -20,7 +20,6 @@
 	<context:component-scan base-package="cn.wangxuchao.ycitz.service" />
 	<context:component-scan base-package="cn.wangxuchao.ycitz.model" />
 	<context:component-scan base-package="cn.wangxuchao.ycitz.dao" />
-	<context:component-scan base-package="cn.wangxuchao.ycitz.task" />
 
 	<!-- 解决@ResponseBody中文乱码,要放到驱动器之前 -->
 	<bean

@@ -11,4 +11,7 @@ public interface SchoolNewsService {
 	String getNewsInfo(int id, int smallid);
 
 	List<SchoolNewsDetail> getSchoolNewsDetail(int id, int smallid);
+	
+	//定时抓取学校新闻列表
+	void doNewsListTask();
 }

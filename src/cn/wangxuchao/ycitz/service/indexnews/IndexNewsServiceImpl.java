@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import cn.wangxuchao.ycitz.dao.indexnews.IndexNewsDao;
@@ -12,6 +14,7 @@ import cn.wangxuchao.ycitz.model.indexnews.IndexNews;
 import cn.wangxuchao.ycitz.util.HttpClientUtil;
 import cn.wangxuchao.ycitz.util.ValueUtil;
 
+@Component
 @Service
 public class IndexNewsServiceImpl implements IndexNewsService {
 	private static final Log logger = LogFactory
@@ -97,6 +100,17 @@ public class IndexNewsServiceImpl implements IndexNewsService {
 			indexNewsList = indexNewsDao.findAll();
 		}
 		return indexNewsList;
+	}
+	
+	/**
+	 * 6点到18点，每整点15分。。隔半个小时获取一次新闻列表
+	 */
+	@Override
+	//@Scheduled(cron = "0 15/30 6-18 * * ?")
+	@Scheduled(cron = "0 15/40 6-18 * * ?")
+	public void doIndexNewsListTask() {
+		logger.info("通过task获取学校首页新闻列表");
+		getSchoolIndexNews();
 	}
 
 }

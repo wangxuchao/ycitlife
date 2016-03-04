@@ -9,6 +9,8 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import cn.wangxuchao.ycitz.dao.schoolnews.SchoolNewsDao;
@@ -23,6 +25,8 @@ import cn.wangxuchao.ycitz.util.ValueUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+
+@Component
 @Service
 public class SchoolNewsServiceImpl implements SchoolNewsService {
 	private static final Log logger = LogFactory
@@ -164,6 +168,25 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 	public List<SchoolNewsDetail> getSchoolNewsDetail(int id, int smallid) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * 6点到18点，每隔半个小时获取一次新闻列表
+	 */
+	@Override
+	@Scheduled(cron = "0 0/40 6-18 * * ?")
+	public void doNewsListTask() {
+		logger.info("获取新闻列表smallid为28，名称为学校要闻的新闻列表。");
+		getNewsList(28);
+		
+		logger.info("获取新闻列表smallid为30，名称为综合新闻的新闻列表。");
+		getNewsList(30);
+		
+		logger.info("获取新闻列表smallid为35，名称为通知通告的新闻列表。");
+		getNewsList(35);
+		
+		logger.info("获取新闻列表smallid为27，名称为校外媒体的新闻列表。");
+		getNewsList(27);
 	}
 
 }

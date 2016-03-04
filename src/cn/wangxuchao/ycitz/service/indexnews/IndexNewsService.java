@@ -13,4 +13,6 @@ public interface IndexNewsService {
 	String getSchoolIndexNews();
 	
 	List<IndexNews> getIndexNews();
+	
+	void doIndexNewsListTask();
 }
