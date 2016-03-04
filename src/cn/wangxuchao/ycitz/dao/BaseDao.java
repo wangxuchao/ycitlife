@@ -7,9 +7,9 @@ public interface BaseDao<T> {
 
 	void edit(T t);
 
-	void delete(int id);
+	void delete(long id);
 
-	T getIndexNews(int id);
+	T findById(long id);
 
 	List<T> findAll();
 }

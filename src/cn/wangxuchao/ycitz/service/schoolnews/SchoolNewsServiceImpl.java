@@ -25,7 +25,6 @@ import cn.wangxuchao.ycitz.util.ValueUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-
 @Component
 @Service
 public class SchoolNewsServiceImpl implements SchoolNewsService {
@@ -165,11 +164,28 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 	}
 
 	@Override
-	public List<SchoolNewsDetail> getSchoolNewsDetail(int id, int smallid) {
-		
-		return null;
+	public SchoolNewsDetail getSchoolNewsDetail(int id, int smallid) {
+		SchoolNews schoolNews = schoolNewsDao.findById(Long.valueOf(id));
+
+		if (schoolNews == null) {
+			getNewsList(smallid);
+			schoolNews = schoolNewsDao.findById(id);
+		}
+
+		SchoolNewsInfo schoolNewsInfo = schoolNewsInfoDao.findById(id);
+		if (schoolNewsInfo == null) {
+			getNewsInfo(id, schoolNews.getSmallid());
+			schoolNewsInfo = schoolNewsInfoDao.findById(Long.valueOf(id));
+		}
+
+		// 组装SchoolNewsDetail对象
+		SchoolNewsDetail schoolNewsDetail = new SchoolNewsDetail();
+		schoolNewsDetail.setSchoolNews(schoolNews);
+		schoolNewsDetail.setSchoolNewsInfo(schoolNewsInfo);
+
+		return schoolNewsDetail;
 	}
-	
+
 	/**
 	 * 6点到18点，每隔半个小时获取一次新闻列表
 	 */
@@ -178,13 +194,13 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 	public void doNewsListTask() {
 		logger.info("获取新闻列表smallid为28，名称为学校要闻的新闻列表。");
 		getNewsList(28);
-		
+
 		logger.info("获取新闻列表smallid为30，名称为综合新闻的新闻列表。");
 		getNewsList(30);
-		
+
 		logger.info("获取新闻列表smallid为35，名称为通知通告的新闻列表。");
 		getNewsList(35);
-		
+
 		logger.info("获取新闻列表smallid为27，名称为校外媒体的新闻列表。");
 		getNewsList(27);
 	}

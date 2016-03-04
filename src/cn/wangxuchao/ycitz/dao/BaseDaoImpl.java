@@ -48,14 +48,14 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	@Override
 	@Transactional
-	public void delete(int id) {
-		sessionFactory.getCurrentSession().delete(getIndexNews(id));
+	public void delete(long id) {
+		sessionFactory.getCurrentSession().delete(findById(id));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public T getIndexNews(int id) {
+	public T findById(long id) {
 		return (T) sessionFactory.getCurrentSession().get(clazz, id);
 	}
 

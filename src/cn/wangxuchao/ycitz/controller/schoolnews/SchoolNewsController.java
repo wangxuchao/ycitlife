@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import cn.wangxuchao.ycitz.service.schoolnews.SchoolNewsService;
 
@@ -18,8 +19,6 @@ public class SchoolNewsController {
 
 	@Autowired
 	private SchoolNewsService schoolNewsService;
-	
-	
 
 	@RequestMapping(value = "/getSchoolNews", method = RequestMethod.GET)
 	public @ResponseBody String getSchoolNews(@RequestParam int smallid) {
@@ -32,5 +31,13 @@ public class SchoolNewsController {
 			@RequestParam int smallid) {
 		logger.info("调用getSchoolNewsInfo");
 		return schoolNewsService.getNewsInfo(id, smallid);
+	}
+
+	@RequestMapping(value = "/news", method = RequestMethod.GET)
+	public ModelAndView getSchoolNewsDetail(@RequestParam int id,
+			@RequestParam int smallid) {
+		logger.info("获取新闻详情");
+		return new ModelAndView("schoolnews/news", "schoolNewsDetail",
+				schoolNewsService.getSchoolNewsDetail(id, smallid));
 	}
 }
