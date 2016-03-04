@@ -99,6 +99,12 @@ public class IndexNewsServiceImpl implements IndexNewsService {
 			getSchoolIndexNews();
 			indexNewsList = indexNewsDao.findAll();
 		}
+		
+		for(IndexNews in:indexNewsList){
+			if(!in.getNewsUrl().startsWith("http://")){
+				in.setNewsUrl(in.getNewsUrl().replaceAll("[\\w\\W]*jsp", ValueUtil.PROJECT_ROOT+"news"));
+			}
+		}
 		return indexNewsList;
 	}
 	
