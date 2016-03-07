@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 
@@ -9,8 +10,8 @@
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,user-scalable=0">
 <title>${schoolNewsDetail.getSchoolNews().getTitle() }|生活在盐工</title>
-<link rel="stylesheet" href="css/weui.min.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href='<c:url value="css/weui.min.css" />' />
+<link rel="stylesheet" href='<c:url value="css/style.css" />' />
 </head>
 <body ontouchstart>
 	<!-- 加载动画 -->
@@ -53,7 +54,7 @@
 
 		<div class="copy">&copy;2016&nbsp;生活在盐工</div>
 	</div>
-	<script src="js/jquery-2.2.0.min.js"></script>
-	<script src="js/script.js"></script>
+	<script src='<c:url value="js/jquery-2.2.0.min.js"/>'></script>
+	<script src='<c:url value="js/script.js"/>'></script>
 </body>
 </html>
