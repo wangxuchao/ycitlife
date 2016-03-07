@@ -138,7 +138,7 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "uploads")
 					.replaceAll("href=\"/admin",
 							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "admin")
-					.replaceAll("附件：<img", "附件：<img style='width:auto;margin-left:auto;'");
+					.replaceAll("<img src=\"http://www.ycit.cn/admin/sysimage", "<img style=\"width:auto;margin-left:auto;\" src=\"http://www.ycit.cn/admin/sysimage");
 
 			String[] htmlArry = html.split("\\n");
 
