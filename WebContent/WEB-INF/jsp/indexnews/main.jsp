@@ -43,9 +43,9 @@
 	<div class="">
 		<!-- 学校要闻 -->
 		<div class="weui_cells_title">
-			<a href="list.jsp?smallid=28">学校要闻</a>
+			<h4><a href="list.jsp?smallid=28">学校要闻</a></h4>
 		</div>
-		<div class="weui_cells weui_cells_access">
+		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
 			<c:forEach var="news" items="${indexNewsList}" begin="0" end="5">
 				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
 					<div class="weui_cell_bd weui_cell_primary news_title">
@@ -56,13 +56,14 @@
 					</div>
 				</a>
 			</c:forEach>
+			<a class="weui_panel_ft" href="list.jsp?smallid=28">查看更多</a>
 		</div>
 
 		<!-- 综合新闻 -->
 		<div class="weui_cells_title">
-			<a href="list.jsp?smallid=30">综合新闻</a>
+			<h4><a href="list.jsp?smallid=30">综合新闻</a></h4>
 		</div>
-		<div class="weui_cells weui_cells_access">
+		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
 			<c:forEach var="news" items="${indexNewsList}" begin="6" end="11">
 				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
 					<div class="weui_cell_bd weui_cell_primary news_title">
@@ -73,13 +74,14 @@
 					</div>
 				</a>
 			</c:forEach>
+			<a class="weui_panel_ft" href="list.jsp?smallid=30">查看更多</a>
 		</div>
 
 		<!-- 通知通告 -->
 		<div class="weui_cells_title">
-			<a href="list.jsp?smallid=35">通知通告</a>
+			<h4><a href="list.jsp?smallid=35">通知通告</a></h4>
 		</div>
-		<div class="weui_cells weui_cells_access">
+		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
 			<c:forEach var="news" items="${indexNewsList}" begin="12" end="17">
 				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
 					<div class="weui_cell_bd weui_cell_primary news_title">
@@ -90,13 +92,14 @@
 					</div>
 				</a>
 			</c:forEach>
+			<a class="weui_panel_ft" href="list.jsp?smallid=35">查看更多</a>
 		</div>
 
 		<!-- 校外媒体 -->
 		<div class="weui_cells_title">
-			<a href="list.jsp?smallid=27">校外媒体</a>
+			<h4><a href="list.jsp?smallid=27">校外媒体</a></h4>
 		</div>
-		<div class="weui_cells weui_cells_access">
+		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
 			<c:forEach var="news" items="${indexNewsList}" begin="18" end="23">
 				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
 					<div class="weui_cell_bd weui_cell_primary news_title">
@@ -107,9 +110,10 @@
 					</div>
 				</a>
 			</c:forEach>
+			<a class="weui_panel_ft" href="list.jsp?smallid=27">查看更多</a>
 		</div>
 
-		<div class="weui_extra_area copy">&copy;2016&nbsp;生活在盐工</div>
+		<div class="copy">&copy;2016&nbsp;生活在盐工</div>
 	</div>
 	<script src="js/jquery-2.2.0.min.js"></script>
 	<script src="js/script.js"></script>

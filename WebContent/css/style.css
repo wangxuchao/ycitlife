@@ -24,3 +24,22 @@
     text-align: center;
     padding: 20px 0 20px 0;
 }
+
+.alignright {
+	text-align: right;
+}
+
+.weui_article p {
+	text-indent:32px;
+	margin-bottom: 10px;
+}
+
+.weui_article img {
+	width: 100%;
+	margin-left: -32px;
+}
+
+.weui_article fujian_img {
+	width: ;
+	margin-left:;
+}

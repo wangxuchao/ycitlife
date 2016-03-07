@@ -116,6 +116,8 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 					.replaceAll("</p>", "</p>p_tag_temp_end")
 					.replaceAll("<P", "p_tag_temp_start<P")
 					.replaceAll("</P>", "</P>p_tag_temp_end")
+					.replaceAll("</a>", "</a>a_tag_temp_end")
+					.replaceAll("</A>", "</A>a_tag_temp_end")
 					.replaceAll("src=\"", ">img_tag_temp_start src=\"")
 					.replaceAll("href=\"", ">a_tag_temp_start href=\"")
 					.replaceAll("</?[a-zA-Z]+[^><]*>", "")
@@ -127,6 +129,7 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 					.replaceAll("p_tag_temp_end", "</p>")
 					.replaceAll("img_tag_temp_start", "<img ")
 					.replaceAll("a_tag_temp_start", "<a ")
+					.replaceAll("a_tag_temp_end", "</a> ")
 					.replaceAll("src=\"/uploads",
 							"src=\"" + ValueUtil.YCIT_HOME_PAGE + "uploads")
 					.replaceAll("src=\"/admin",
@@ -134,7 +137,8 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 					.replaceAll("href=\"/uploads",
 							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "uploads")
 					.replaceAll("href=\"/admin",
-							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "admin");
+							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "admin")
+					.replaceAll("附件：<img", "附件：<img style='width:auto;margin-left:auto;'");
 
 			String[] htmlArry = html.split("\\n");
 
