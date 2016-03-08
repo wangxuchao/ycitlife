@@ -46,7 +46,7 @@
 		<!-- 学校要闻 -->
 		<div class="weui_cells_title">
 			<h4>
-				<a href="list.jsp?smallid=28">学校要闻</a>
+				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=28">学校要闻</a>
 			</h4>
 		</div>
 		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
@@ -60,13 +60,13 @@
 					</div>
 				</a>
 			</c:forEach>
-			<a class="weui_panel_ft" href="list.jsp?smallid=28">查看更多</a>
+			<a class="weui_panel_ft" href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=28">查看更多</a>
 		</div>
 
 		<!-- 综合新闻 -->
 		<div class="weui_cells_title">
 			<h4>
-				<a href="list.jsp?smallid=30">综合新闻</a>
+				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=30">综合新闻</a>
 			</h4>
 		</div>
 		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
@@ -80,13 +80,13 @@
 					</div>
 				</a>
 			</c:forEach>
-			<a class="weui_panel_ft" href="list.jsp?smallid=30">查看更多</a>
+			<a class="weui_panel_ft" href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=30">查看更多</a>
 		</div>
 
 		<!-- 通知通告 -->
 		<div class="weui_cells_title">
 			<h4>
-				<a href="list.jsp?smallid=35">通知通告</a>
+				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=35">通知通告</a>
 			</h4>
 		</div>
 		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
@@ -100,13 +100,13 @@
 					</div>
 				</a>
 			</c:forEach>
-			<a class="weui_panel_ft" href="list.jsp?smallid=35">查看更多</a>
+			<a class="weui_panel_ft" href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=35">查看更多</a>
 		</div>
 
 		<!-- 校外媒体 -->
 		<div class="weui_cells_title">
 			<h4>
-				<a href="list.jsp?smallid=27">校外媒体</a>
+				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=27">校外媒体</a>
 			</h4>
 		</div>
 		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
@@ -120,7 +120,7 @@
 					</div>
 				</a>
 			</c:forEach>
-			<a class="weui_panel_ft" href="list.jsp?smallid=27">查看更多</a>
+			<a class="weui_panel_ft" href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=27">查看更多</a>
 		</div>
 
 		<div class="copy">&copy;2016&nbsp;生活在盐工</div>

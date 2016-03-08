@@ -1,5 +1,8 @@
 package cn.wangxuchao.ycitz.service.schoolnews;
 
+import java.util.List;
+
+import cn.wangxuchao.ycitz.model.schoolnews.SchoolNews;
 import cn.wangxuchao.ycitz.model.schoolnews.SchoolNewsDetail;
 
 public interface SchoolNewsService {
@@ -12,4 +15,6 @@ public interface SchoolNewsService {
 
 	// 定时抓取学校新闻列表
 	void doNewsListTask();
+
+	List<SchoolNews> getNewsList(int start, int max, int smallid);
 }

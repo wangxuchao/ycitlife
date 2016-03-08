@@ -22,6 +22,7 @@ import cn.wangxuchao.ycitz.service.baidumusic.BaiduMusicService;
 import cn.wangxuchao.ycitz.service.face.FaceService;
 import cn.wangxuchao.ycitz.service.todayinhistory.TodayInHistoryService;
 import cn.wangxuchao.ycitz.util.MessageUtil;
+import cn.wangxuchao.ycitz.util.ValueUtil;
 
 @Service
 public class CoreServiceImpl implements CoreService {
@@ -63,12 +64,18 @@ public class CoreServiceImpl implements CoreService {
 			// 文本消息
 			if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
 				String content = requestMap.get("Content");
-				if (content.equals("历史上的今天") || content.equals("2")) {
+				if (content.startsWith("/::")) {
+					respContent = "么么哒";
+				} else if (content.equals("看新闻") || content.equals("1")) {
+					logger.info("调用看新闻");
+					respContent = "<a href=\"" + ValueUtil.PROJECT_ROOT
+							+ "\">点击查看</a>";
+				} else if (content.equals("历史上的今天") || content.equals("2")) {
 					logger.info("调用历史上的今天");
 					String url = "http://www.rijiben.com/";
 					respContent = todayInHistoryService
 							.getTodayInHistoryInfo(url);
-				} else if (content.startsWith("歌曲")) {
+				} else if (content.startsWith("歌曲") || content.equals("3")) {
 					// 将歌曲2个字及歌曲后面的+、空格、-等特殊符号去掉
 					String keyWord = content.replaceAll("^歌曲[\\+ ~!@#%^-_=]?",
 							"");
@@ -103,7 +110,7 @@ public class CoreServiceImpl implements CoreService {
 							respXML = MessageUtil.messageToXML(musicMessage);
 						}
 					}
-				} else if (content.equals("附近")) {
+				} else if (content.equals("附近") || content.equals("4")) {
 					respContent = "请输入附近+地点来搜索";
 				}// 周边搜索
 				else if (content.startsWith("附近")) {
@@ -144,7 +151,7 @@ public class CoreServiceImpl implements CoreService {
 						}
 					}
 				} else {
-					respContent = "您发送的是:" + content;
+					respContent = getFunction();
 				}
 			}
 			// 图片消息
@@ -156,7 +163,7 @@ public class CoreServiceImpl implements CoreService {
 			}
 			// 链接消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_LINK)) {
-				respContent = "您发送的是链接消息！";
+				respContent = "这是什么链接？";
 			}
 			// 地理位置消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) {
@@ -211,7 +218,7 @@ public class CoreServiceImpl implements CoreService {
 
 				// 关注事件
 				if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
-					respContent = "欢迎关注Spring MVC！";
+					respContent = "欢迎关注生活在盐工，回复“功能”来查看最新功能吧！";
 				}
 				// 取消关注
 				else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
@@ -241,6 +248,24 @@ public class CoreServiceImpl implements CoreService {
 		buffer.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n\n");
 		buffer.append("2）指定关键词搜索").append("\n");
 		buffer.append("格式：附近+关键词\n例如：附近ATM、附近KTV、附近厕所");
+		return buffer.toString();
+	}
+
+	/**
+	 * 以实现功能说明
+	 *
+	 * @return
+	 */
+	private static String getFunction() {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("功能列表：").append("\n\n");
+		buffer.append("1)看新闻").append("\n");
+		buffer.append("2)历史上的今天").append("\n");
+		buffer.append("3)歌曲").append("\n");
+		buffer.append("4)附近").append("\n");
+		buffer.append("回复功能名称或前面的序号使用").append("\n\n");
+		buffer.append("下一个会被添加的功能：").append("\n");
+		buffer.append("智能聊天机器人：小盐");
 		return buffer.toString();
 	}
 }

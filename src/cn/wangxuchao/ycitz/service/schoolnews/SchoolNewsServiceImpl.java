@@ -138,7 +138,9 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "uploads")
 					.replaceAll("href=\"/admin",
 							"href=\"" + ValueUtil.YCIT_HOME_PAGE + "admin")
-					.replaceAll("<img src=\"http://www.ycit.cn/admin/sysimage", "<img style=\"width:auto;margin-left:auto;\" src=\"http://www.ycit.cn/admin/sysimage");
+					.replaceAll(
+							"<img src=\"http://www.ycit.cn/admin/sysimage",
+							"<img style=\"width:auto;margin-left:auto;\" src=\"http://www.ycit.cn/admin/sysimage");
 
 			String[] htmlArry = html.split("\\n");
 
@@ -207,6 +209,11 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 
 		logger.info("获取新闻列表smallid为27，名称为校外媒体的新闻列表。");
 		getNewsList(27);
+	}
+
+	@Override
+	public List<SchoolNews> getNewsList(int start, int max, int smallid) {
+		return schoolNewsDao.getNewsList(start, max, smallid);
 	}
 
 }
