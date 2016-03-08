@@ -3,6 +3,7 @@ package cn.wangxuchao.ycitz.util;
 public class ValueUtil {
 	
 	//项目根路径
+	//public static final String PROJECT_ROOT = "http://120.26.114.9/ycitz/";
 	public static final String PROJECT_ROOT = "http://localhost:8080/ycitlife/";
 	
 	//百度地图服务端AK
