@@ -19,6 +19,7 @@ import cn.wangxuchao.ycitz.model.weixin.message.response.NewsMessage;
 import cn.wangxuchao.ycitz.model.weixin.message.response.TextMessage;
 import cn.wangxuchao.ycitz.service.baidumap.BaiduMapService;
 import cn.wangxuchao.ycitz.service.baidumusic.BaiduMusicService;
+import cn.wangxuchao.ycitz.service.chatrobot.ChatService;
 import cn.wangxuchao.ycitz.service.face.FaceService;
 import cn.wangxuchao.ycitz.service.todayinhistory.TodayInHistoryService;
 import cn.wangxuchao.ycitz.util.MessageUtil;
@@ -37,6 +38,8 @@ public class CoreServiceImpl implements CoreService {
 	private UserLocationDao userLocationDao;
 	@Autowired
 	private BaiduMapService baiduMapService;
+	@Autowired
+	private ChatService chatService;
 
 	@Override
 	public String process(HashMap<String, String> requestMap) {
@@ -54,6 +57,8 @@ public class CoreServiceImpl implements CoreService {
 			String toUserName = requestMap.get("ToUserName");
 			// 请求消息类型
 			String msgType = requestMap.get("MsgType");
+			// 消息创建时间
+			String createTime = requestMap.get("CreateTime");
 
 			tm.setFromUserName(toUserName);
 			tm.setToUserName(fromUserName);
@@ -151,7 +156,8 @@ public class CoreServiceImpl implements CoreService {
 						}
 					}
 				} else {
-					respContent = getFunction();
+					respContent = chatService.chat(fromUserName, createTime,
+							content);
 				}
 			}
 			// 图片消息

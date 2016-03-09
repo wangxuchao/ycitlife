@@ -147,6 +147,7 @@ public class MessageUtil {
 	private static void recursiveParseXML(Element root,
 			HashMap<String, String> map) {
 		// 得到根节点的子节点列表
+		@SuppressWarnings("unchecked")
 		List<Element> elementList = root.elements();
 
 		// 判断有没有子元素列表
@@ -169,7 +170,7 @@ public class MessageUtil {
 				boolean cdata = true;
 
 				@Override
-				public void startNode(String name, Class clazz) {
+				public void startNode(String name, @SuppressWarnings("rawtypes") Class clazz) {
 					super.startNode(name, clazz);
 				}
 

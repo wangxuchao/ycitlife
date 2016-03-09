@@ -54,7 +54,7 @@ public class MenuManager {
 		return menu;
 	}
 
-	public static void main(String[] args) {
+	public static void menu() {
 		// 第三方用户唯一凭证
 		String appId = "xxxxxxxxxxxxxxxxxx";
 		// 第三方用户唯一凭证密钥
