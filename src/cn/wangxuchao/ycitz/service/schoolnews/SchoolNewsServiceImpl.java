@@ -2,6 +2,7 @@ package cn.wangxuchao.ycitz.service.schoolnews;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import cn.wangxuchao.ycitz.model.schoolnews.SchoolNews;
 import cn.wangxuchao.ycitz.model.schoolnews.SchoolNewsDetail;
 import cn.wangxuchao.ycitz.model.schoolnews.SchoolNewsInfo;
 import cn.wangxuchao.ycitz.model.schoolnews.SchoolNewsJson;
+import cn.wangxuchao.ycitz.model.weixin.message.response.Article;
 import cn.wangxuchao.ycitz.util.HttpClientUtil;
 import cn.wangxuchao.ycitz.util.ValueUtil;
 
@@ -196,7 +198,7 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 	 * 6点到18点，每隔半个小时获取一次新闻列表
 	 */
 	@Override
-	@Scheduled(cron = "0 0/40 6-18 * * ?")
+	@Scheduled(cron = "10 0/50 6-18 * * ?")
 	public void doNewsListTask() {
 		logger.info("获取新闻列表smallid为28，名称为学校要闻的新闻列表。");
 		getNewsList(28);
@@ -209,11 +211,45 @@ public class SchoolNewsServiceImpl implements SchoolNewsService {
 
 		logger.info("获取新闻列表smallid为27，名称为校外媒体的新闻列表。");
 		getNewsList(27);
+
+		logger.info("获取新闻列表smallid为36，名称为高教动态的新闻列表。");
+		getNewsList(36);
 	}
 
 	@Override
 	public List<SchoolNews> getNewsList(int start, int max, int smallid) {
 		return schoolNewsDao.getNewsList(start, max, smallid);
+	}
+
+	@Override
+	public List<Article> makeArticleList(List<SchoolNews> schoolNewsList) {
+		List<Article> articleList = new ArrayList<Article>();
+		SimpleDateFormat newsDateFormat = new SimpleDateFormat("MM.dd");
+		int count = 0;
+		for (SchoolNews schoolNews : schoolNewsList) {
+			Article article = new Article();
+			article.setTitle(newsDateFormat.format(schoolNews.getAddtime())
+					+ " " + schoolNews.getTitle());
+			article.setUrl(ValueUtil.PROJECT_ROOT + "news?id="
+					+ schoolNews.getId() + "&smallid="
+					+ schoolNews.getSmallid());
+			// 将首条图文的图片设置为大图
+			if (count == 0) {
+				article.setPicUrl(ValueUtil.PROJECT_ROOT
+						+ "images/schoolnews.jpg");
+			} else {
+				article.setPicUrl(ValueUtil.PROJECT_ROOT + "images/next.jpg");
+			}
+			articleList.add(article);
+			count++;
+		}
+		Article more = new Article();
+		more.setTitle("查看更多");
+		more.setUrl(ValueUtil.PROJECT_ROOT + "list?smallid="
+				+ schoolNewsList.get(0).getSmallid());
+		more.setPicUrl(ValueUtil.PROJECT_ROOT + "images/more.jpg");
+		articleList.add(more);
+		return articleList;
 	}
 
 }

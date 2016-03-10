@@ -15,7 +15,6 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -89,6 +88,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 			indexWriter.close();
 			directory.close();
 		} catch (IOException e) {
+			logger.info("索引创建失败：" + e.getMessage());
 		}
 
 	}
@@ -123,7 +123,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 			directory.close();
 		} catch (IOException e) {
 			knowledge = null;
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			knowledge = null;
 		}
 		return knowledge;
@@ -176,7 +176,6 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 		chatLog.setChatCategory(chatCategory);
 
 		chatLogDao.add(chatLog);
-
 		return answer;
 	}
 
@@ -202,12 +201,12 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext arg0)
 			throws BeansException {
+		logger.info("开始创建索引文件");
 		File indexDir = new File(this.getIndexDir());
 		// 如果索引目录不存在则创建索引
 		if (!indexDir.exists()) {
 			this.createIndex();
 		}
-
 	}
 
 }

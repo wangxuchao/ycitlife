@@ -59,6 +59,8 @@ public class SchoolNewsController {
 			categoryTitle = "通知通告";
 		} else if (smallid == 27) {
 			categoryTitle = "校外媒体";
+		}else if (smallid == 36) {
+			categoryTitle = "高教动态";
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("categoryTitle", categoryTitle);

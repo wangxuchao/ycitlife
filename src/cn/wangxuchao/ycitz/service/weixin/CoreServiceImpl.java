@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import cn.wangxuchao.ycitz.dao.baidumap.UserLocationDao;
 import cn.wangxuchao.ycitz.model.baidumap.BaiduPlace;
 import cn.wangxuchao.ycitz.model.baidumap.UserLocation;
+import cn.wangxuchao.ycitz.model.schoolnews.SchoolNews;
 import cn.wangxuchao.ycitz.model.weixin.message.response.Article;
 import cn.wangxuchao.ycitz.model.weixin.message.response.Music;
 import cn.wangxuchao.ycitz.model.weixin.message.response.MusicMessage;
@@ -21,7 +22,9 @@ import cn.wangxuchao.ycitz.service.baidumap.BaiduMapService;
 import cn.wangxuchao.ycitz.service.baidumusic.BaiduMusicService;
 import cn.wangxuchao.ycitz.service.chatrobot.ChatService;
 import cn.wangxuchao.ycitz.service.face.FaceService;
+import cn.wangxuchao.ycitz.service.schoolnews.SchoolNewsService;
 import cn.wangxuchao.ycitz.service.todayinhistory.TodayInHistoryService;
+import cn.wangxuchao.ycitz.util.GetMessageUtil;
 import cn.wangxuchao.ycitz.util.MessageUtil;
 import cn.wangxuchao.ycitz.util.ValueUtil;
 
@@ -40,13 +43,15 @@ public class CoreServiceImpl implements CoreService {
 	private BaiduMapService baiduMapService;
 	@Autowired
 	private ChatService chatService;
+	@Autowired
+	private SchoolNewsService schoolNewsService;
 
 	@Override
 	public String process(HashMap<String, String> requestMap) {
 
 		String respXML = null;
 		// 默认返回的文本消息内容
-		String respContent = "";
+		String respContent = "恩";
 		TextMessage tm = new TextMessage();
 
 		// 解析微信服务器发送的请求
@@ -71,6 +76,8 @@ public class CoreServiceImpl implements CoreService {
 				String content = requestMap.get("Content");
 				if (content.startsWith("/::")) {
 					respContent = "么么哒";
+				} else if (content.equals("看新闻") || content.equals("1")) {
+					respContent = getFunction();
 				} else if (content.equals("看新闻") || content.equals("1")) {
 					logger.info("调用看新闻");
 					respContent = "<a href=\"" + ValueUtil.PROJECT_ROOT
@@ -105,20 +112,39 @@ public class CoreServiceImpl implements CoreService {
 							respContent = "对不起，没有找到你想听的歌曲<" + musicTitle + ">。";
 						} else {
 							// 音乐消息
-							MusicMessage musicMessage = new MusicMessage();
-							musicMessage.setToUserName(fromUserName);
-							musicMessage.setFromUserName(toUserName);
-							musicMessage.setCreateTime(new Date().getTime());
-							musicMessage
-									.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_MUSIC);
-							musicMessage.setMusic(music);
+							MusicMessage musicMessage = GetMessageUtil
+									.getMusicMessage(music, fromUserName,
+											toUserName);
 							respXML = MessageUtil.messageToXML(musicMessage);
 						}
 					}
+				} else if (content.equals("综合新闻") || content.equals("通知通告")
+						|| content.equals("学校要闻") || content.equals("校外媒体")
+						|| content.equals("高教动态")) {
+					int smallid = 28;
+					if (content.equals("综合新闻")) {
+						smallid = 30;
+					} else if (content.equals("通知通告")) {
+						smallid = 35;
+					} else if (content.equals("校外媒体")) {
+						smallid = 27;
+					} else if (content.equals("高教动态")) {
+						smallid = 36;
+					}
+					List<SchoolNews> schoolNewsList = schoolNewsService
+							.getNewsList(0, 5, smallid);
+					List<Article> articleList = schoolNewsService
+							.makeArticleList(schoolNewsList);
+					NewsMessage newsMessage = GetMessageUtil.getNewsMessage(
+							articleList, fromUserName, toUserName);
+					respXML = MessageUtil.messageToXML(newsMessage);
+					if (respXML == null) {
+						respContent = "Sorry,系统忙！";
+					}
 				} else if (content.equals("附近") || content.equals("4")) {
 					respContent = "请输入附近+地点来搜索";
-				}// 周边搜索
-				else if (content.startsWith("附近")) {
+				} else if (content.startsWith("附近")) {
+					// 周边搜索
 					String keyWord = content.replaceAll("附近", "").trim();
 					logger.info("附近搜索：" + keyWord);
 					// 获取用户最后一次发送的地理位置
@@ -144,14 +170,9 @@ public class CoreServiceImpl implements CoreService {
 											userLocation.getBd09Lng(),
 											userLocation.getBd09Lat());
 							// 回复图文消息
-							NewsMessage newsMessage = new NewsMessage();
-							newsMessage.setToUserName(fromUserName);
-							newsMessage.setFromUserName(toUserName);
-							newsMessage.setCreateTime(new Date().getTime());
-							newsMessage
-									.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
-							newsMessage.setArticles(articleList);
-							newsMessage.setArticleCount(articleList.size());
+							NewsMessage newsMessage = GetMessageUtil
+									.getNewsMessage(articleList, fromUserName,
+											toUserName);
 							respXML = MessageUtil.messageToXML(newsMessage);
 						}
 					}
@@ -207,15 +228,15 @@ public class CoreServiceImpl implements CoreService {
 			}
 			// 视频消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_VIDEO)) {
-				respContent = "您发送的是视频消息！";
+				respContent = "这是什么视频？";
 			}
 			// 小视频消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_SHORTVIDEO)) {
-				respContent = "您发送的是小视频消息！";
+				respContent = "这是什么小视频？";
 			}
 			// 语音消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_VOICE)) {
-				respContent = "您发送的是语音消息！";
+				respContent = "你在说啥？";
 			}
 			// 事件
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
@@ -229,13 +250,94 @@ public class CoreServiceImpl implements CoreService {
 				// 取消关注
 				else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
 
+				}// 扫描带参数二维码
+				else if (eventType.equals(MessageUtil.EVENT_TYPE_SCAN)) {
+
+				} // 上报地理位置
+				else if (eventType.equals(MessageUtil.EVENT_TYPE_LOCATION)) {
+
+				} // 自定义菜单
+				else if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
+					// 事件KEY值，与创建菜单时的key值对应
+					String eventKey = requestMap.get("EventKey");
+					// 根据key值判断用户点击的按钮
+					if (eventKey.equals("xxyw")) {
+						List<SchoolNews> schoolNewsList = schoolNewsService
+								.getNewsList(0, 5, 28);
+						List<Article> articleList = schoolNewsService
+								.makeArticleList(schoolNewsList);
+						// 回复图文消息
+						NewsMessage newsMessage = GetMessageUtil
+								.getNewsMessage(articleList, fromUserName,
+										toUserName);
+						respXML = MessageUtil.messageToXML(newsMessage);
+						if (respXML == null) {
+							respContent = "Sorry,系统忙！";
+						}
+					} else if (eventKey.equals("zhxw")) {
+						List<SchoolNews> schoolNewsList = schoolNewsService
+								.getNewsList(0, 5, 30);
+						List<Article> articleList = schoolNewsService
+								.makeArticleList(schoolNewsList);
+						// 回复图文消息
+						NewsMessage newsMessage = GetMessageUtil
+								.getNewsMessage(articleList, fromUserName,
+										toUserName);
+						respXML = MessageUtil.messageToXML(newsMessage);
+						if (respXML == null) {
+							respContent = "Sorry,系统忙！";
+						}
+					} else if (eventKey.equals("tztg")) {
+						List<SchoolNews> schoolNewsList = schoolNewsService
+								.getNewsList(0, 5, 35);
+						List<Article> articleList = schoolNewsService
+								.makeArticleList(schoolNewsList);
+						// 回复图文消息
+						NewsMessage newsMessage = GetMessageUtil
+								.getNewsMessage(articleList, fromUserName,
+										toUserName);
+						respXML = MessageUtil.messageToXML(newsMessage);
+						if (respXML == null) {
+							respContent = "Sorry,系统忙！";
+						}
+					} else if (eventKey.equals("xwmt")) {
+						List<SchoolNews> schoolNewsList = schoolNewsService
+								.getNewsList(0, 5, 27);
+						List<Article> articleList = schoolNewsService
+								.makeArticleList(schoolNewsList);
+						// 回复图文消息
+						NewsMessage newsMessage = GetMessageUtil
+								.getNewsMessage(articleList, fromUserName,
+										toUserName);
+						respXML = MessageUtil.messageToXML(newsMessage);
+						if (respXML == null) {
+							respContent = "Sorry,系统忙！";
+						}
+					} else if (eventKey.equals("gjdt")) {
+						List<SchoolNews> schoolNewsList = schoolNewsService
+								.getNewsList(0, 5, 36);
+						List<Article> articleList = schoolNewsService
+								.makeArticleList(schoolNewsList);
+						// 回复图文消息
+						NewsMessage newsMessage = GetMessageUtil
+								.getNewsMessage(articleList, fromUserName,
+										toUserName);
+						respXML = MessageUtil.messageToXML(newsMessage);
+						if (respXML == null) {
+							respContent = "Sorry,系统忙！";
+						}
+					} else if (eventKey.equals("function")) {
+						respContent = getFunction();
+					} else {
+						respContent = "您暂时还不能使用此功能！";
+					}
 				}
 			}
 		} catch (Exception e) {
-
+			logger.error(e.getMessage());
 		}
 		if (respXML == null) {
-			tm.setContent(respContent);
+			tm.setContent("小盐：" + respContent);
 			respXML = MessageUtil.messageToXML(tm);
 		}
 
