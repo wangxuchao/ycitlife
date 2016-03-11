@@ -12,8 +12,8 @@
 	content="width=device-width,initial-scale=1,user-scalable=0">
 <title>${schoolNewsDetail.getSchoolNews().getTitle() }|生活在盐工</title>
 <link rel="stylesheet"
-	href="<%=ValueUtil.PROJECT_ROOT%>css/weui.min.css" />
-<link rel="stylesheet" href="<%=ValueUtil.PROJECT_ROOT%>css/style.css" />
+	href="<%=ValueUtil.PROJECT_ROOT%>css/weui.min.css?v=<%=ValueUtil.PROJECT_VERSION%>" />
+<link rel="stylesheet" href="<%=ValueUtil.PROJECT_ROOT%>css/style.css?v=<%=ValueUtil.PROJECT_VERSION%>" />
 </head>
 <body ontouchstart>
 	<!-- 加载动画 -->
@@ -56,7 +56,7 @@
 
 		<div class="copy">&copy;2016&nbsp;生活在盐工</div>
 	</div>
-	<script src="<%=ValueUtil.PROJECT_ROOT%>js/jquery-2.2.0.min.js" /></script>
-	<script src="<%=ValueUtil.PROJECT_ROOT%>js/script.js" /></script>
+	<script src="<%=ValueUtil.PROJECT_ROOT%>js/jquery-2.2.0.min.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
+	<script src="<%=ValueUtil.PROJECT_ROOT%>js/script.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
 </body>
 </html>

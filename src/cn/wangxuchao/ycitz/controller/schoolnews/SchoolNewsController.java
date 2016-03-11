@@ -47,7 +47,11 @@ public class SchoolNewsController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView getSchoolNewsList(Integer smallid) {
 		if (smallid == null) {
-			return new ModelAndView("error/error");
+			Map<String, String> msgmap = new HashMap<String, String>();
+			msgmap.put("msg_icon_class", "weui_icon_warn");
+			msgmap.put("msg_title", "新闻列表获取失败");
+			msgmap.put("msg_desc", "请从公众号或官网进入本页面");
+			return new ModelAndView("error/error", msgmap);
 		}
 		logger.info("获取新闻列表");
 		String categoryTitle = "未知分类";

@@ -20,7 +20,11 @@ public class MapController {
 	public ModelAndView getRoute(@RequestParam(required = false) String p1,
 			@RequestParam(required = false) String p2) {
 		if (p1 == null || p2 == null) {
-			return new ModelAndView("error/error");
+			Map<String, String> msgmap = new HashMap<String, String>();
+			msgmap.put("msg_icon_class", "weui_icon_warn");
+			msgmap.put("msg_title", "路径规划出错");
+			msgmap.put("msg_desc", "");
+			return new ModelAndView("error/error", msgmap);
 		}
 		logger.info("显示路径");
 		Map<String, String> map = new HashMap<String, String>();

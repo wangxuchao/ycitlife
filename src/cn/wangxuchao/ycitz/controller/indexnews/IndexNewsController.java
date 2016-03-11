@@ -1,6 +1,8 @@
 package cn.wangxuchao.ycitz.controller.indexnews;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +34,11 @@ public class IndexNewsController {
 		logger.info("访问主页");
 		List<IndexNews> indexNewsList = indexNewsService.getIndexNews();
 		if (indexNewsList.size() != 24) {
-			return new ModelAndView("error/error");
+			Map<String, String> msgmap = new HashMap<String, String>();
+			msgmap.put("msg_icon_class", "weui_icon_warn");
+			msgmap.put("msg_title", "系统忙！");
+			msgmap.put("msg_desc", "请您稍候再试");
+			return new ModelAndView("error/error", msgmap);
 		}
 		return new ModelAndView("indexnews/main", "indexNewsList",
 				indexNewsList);
