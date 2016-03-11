@@ -1,28 +1,28 @@
 .page {
-    padding: 0 15px;
+	padding: 0 15px;
 }
 
-.page,body {
-    background-color: #fbf9fe;
+.page, body {
+	background-color: #fbf9fe;
 }
 
 .news_title {
-    overflow:hidden;
-    text-overflow:ellipsis;/*文字溢出的部分隐藏并用省略号代替*/
-    white-space:nowrap;/*文本不自动换行*/
+	overflow: hidden;
+	text-overflow: ellipsis; /*文字溢出的部分隐藏并用省略号代替*/
+	white-space: nowrap; /*文本不自动换行*/
 }
 
 .news_time {
-    width: 80px;
+	width: 80px;
 }
 
 .weui_cells_title a {
-    color: #888;
+	color: #888;
 }
 
 .copy {
-    text-align: center;
-    padding: 20px 0 20px 0;
+	text-align: center;
+	padding: 20px 0 20px 0;
 }
 
 .alignright {
@@ -30,7 +30,7 @@
 }
 
 .weui_article p {
-	text-indent:32px;
+	text-indent: 32px;
 	margin-bottom: 10px;
 }
 
@@ -40,6 +40,16 @@
 }
 
 .weui_article fujian_img {
-	width: ;
+	width:;
 	margin-left:;
+}
+
+.comment_btn {
+	float: right;
+	margin-top: -45px;
+	margin-right: 20px;
+}
+
+#comment_tips span {
+	padding-left: 5px;
 }

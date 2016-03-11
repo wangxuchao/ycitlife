@@ -22,7 +22,7 @@ public class JokeDaoImpl extends BaseDaoImpl<Joke> implements JokeDao {
 	public String getJoke() {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(
 				Joke.class);
-		criteria.add(Restrictions.sqlRestriction("order by rand()"));
+		criteria.add(Restrictions.sqlRestriction(" 1=1 order by rand() "));
 		criteria.setFirstResult(0);
 		criteria.setMaxResults(1);
 		@SuppressWarnings("unchecked")
