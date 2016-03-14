@@ -2,6 +2,10 @@ $("body").ready(function() {
 	$("#loadingToast").css("display", "none");
 });
 
+$("a").click(function() {
+	$("#loadingToast").css("display", "block");
+});
+
 $("#more_news_list").click(
 		function() {
 			$("#loadingToast").css("display", "block");
