@@ -50,6 +50,8 @@
 	<script
 		src="<%=ValueUtil.PROJECT_ROOT%>js/jquery-2.2.0.min.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
 	<script
+		src="<%=ValueUtil.PROJECT_ROOT%>js/jquery.lazyload.min.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
+	<script
 		src="<%=ValueUtil.PROJECT_ROOT%>js/script.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
 </body>
 </html>

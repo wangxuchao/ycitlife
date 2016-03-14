@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import cn.wangxuchao.ycitz.dao.baidumap.UserLocationDao;
 import cn.wangxuchao.ycitz.model.baidumap.BaiduPlace;
 import cn.wangxuchao.ycitz.model.baidumap.UserLocation;
+import cn.wangxuchao.ycitz.model.jwc.news.JWCIndexNews;
 import cn.wangxuchao.ycitz.model.schoolnews.SchoolNews;
 import cn.wangxuchao.ycitz.model.weixin.message.response.Article;
 import cn.wangxuchao.ycitz.model.weixin.message.response.Music;
@@ -22,6 +23,7 @@ import cn.wangxuchao.ycitz.service.baidumap.BaiduMapService;
 import cn.wangxuchao.ycitz.service.baidumusic.BaiduMusicService;
 import cn.wangxuchao.ycitz.service.chatrobot.ChatService;
 import cn.wangxuchao.ycitz.service.face.FaceService;
+import cn.wangxuchao.ycitz.service.jwc.news.JWCNewsService;
 import cn.wangxuchao.ycitz.service.schoolnews.SchoolNewsService;
 import cn.wangxuchao.ycitz.service.todayinhistory.TodayInHistoryService;
 import cn.wangxuchao.ycitz.util.GetMessageUtil;
@@ -45,6 +47,8 @@ public class CoreServiceImpl implements CoreService {
 	private ChatService chatService;
 	@Autowired
 	private SchoolNewsService schoolNewsService;
+	@Autowired
+	private JWCNewsService jwcNewsService;
 
 	@Override
 	public String process(HashMap<String, String> requestMap) {
@@ -76,7 +80,7 @@ public class CoreServiceImpl implements CoreService {
 				String content = requestMap.get("Content");
 				if (content.startsWith("/::")) {
 					respContent = "么么哒";
-				} else if (content.equals("看新闻") || content.equals("1")) {
+				} else if (content.equals("功能")) {
 					respContent = getFunction();
 				} else if (content.equals("看新闻") || content.equals("1")) {
 					logger.info("调用看新闻");
@@ -135,6 +139,17 @@ public class CoreServiceImpl implements CoreService {
 							.getNewsList(0, 5, smallid);
 					List<Article> articleList = schoolNewsService
 							.makeArticleList(schoolNewsList);
+					NewsMessage newsMessage = GetMessageUtil.getNewsMessage(
+							articleList, fromUserName, toUserName);
+					respXML = MessageUtil.messageToXML(newsMessage);
+					if (respXML == null) {
+						respContent = "Sorry,系统忙！";
+					}
+				} else if (content.equals("教务通知")) {
+					List<JWCIndexNews> jwcIndexNewsList = jwcNewsService
+							.getIndexNews();
+					List<Article> articleList = jwcNewsService
+							.makeArticleList(jwcIndexNewsList);
 					NewsMessage newsMessage = GetMessageUtil.getNewsMessage(
 							articleList, fromUserName, toUserName);
 					respXML = MessageUtil.messageToXML(newsMessage);
@@ -326,6 +341,17 @@ public class CoreServiceImpl implements CoreService {
 						if (respXML == null) {
 							respContent = "Sorry,系统忙！";
 						}
+					} else if (eventKey.equals("jwtz")) {
+						List<JWCIndexNews> jwcIndexNewsList = jwcNewsService.getIndexNews();
+						List<Article> articleList = jwcNewsService
+								.makeArticleList(jwcIndexNewsList);
+						NewsMessage newsMessage = GetMessageUtil
+								.getNewsMessage(articleList, fromUserName,
+										toUserName);
+						respXML = MessageUtil.messageToXML(newsMessage);
+						if (respXML == null) {
+							respContent = "Sorry,系统忙！";
+						}
 					} else if (eventKey.equals("function")) {
 						respContent = getFunction();
 					} else {
@@ -372,8 +398,8 @@ public class CoreServiceImpl implements CoreService {
 		buffer.append("3)歌曲").append("\n");
 		buffer.append("4)附近").append("\n");
 		buffer.append("回复功能名称或前面的序号使用").append("\n\n");
-		buffer.append("下一个会被添加的功能：").append("\n");
-		buffer.append("智能聊天机器人：小盐");
+		buffer.append("下一个可能会被添加的功能：").append("\n");
+		buffer.append("成绩查询");
 		return buffer.toString();
 	}
 }

@@ -46,8 +46,49 @@ public class HttpClientUtil {
 					int status = response.getStatusLine().getStatusCode();
 					if (status >= 200 && status < 300) {
 						HttpEntity entity = response.getEntity();
-						return entity != null ? EntityUtils.toString(entity)
-								: null;
+						return entity != null ? EntityUtils.toString(entity,
+								"gb2312") : null;
+					} else {
+						return "error:code:0x000" + status;
+					}
+				}
+			};
+			String responseBody = httpclient.execute(httpget, responseHandler);
+			return responseBody;
+		} catch (Exception e) {
+			return "error:连接超时";
+		} finally {
+			httpclient.close();
+		}
+	}
+
+	/**
+	 * 处理Get请求,并按规定编码处理
+	 *
+	 * @param url
+	 *            请求链接
+	 * @return responseBody 网页源代码
+	 * @throws Exception
+	 */
+	public static String httpGet(String url, final String charset)
+			throws Exception {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		try {
+			HttpGet httpget = new HttpGet(url);
+
+			// 设置请求和传输超时时间
+			RequestConfig requestConfig = RequestConfig.custom()
+					.setSocketTimeout(10000).setConnectTimeout(10000).build();
+			httpget.setConfig(requestConfig);
+			ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+				@Override
+				public String handleResponse(final HttpResponse response)
+						throws ClientProtocolException, IOException {
+					int status = response.getStatusLine().getStatusCode();
+					if (status >= 200 && status < 300) {
+						HttpEntity entity = response.getEntity();
+						return entity != null ? EntityUtils.toString(entity,
+								charset) : null;
 					} else {
 						return "error:code:0x000" + status;
 					}
@@ -86,7 +127,7 @@ public class HttpClientUtil {
 					Consts.UTF_8);
 			HttpPost httppost = new HttpPost(url);
 			httppost.setEntity(entity);
-			
+
 			// 设置请求和传输超时时间
 			RequestConfig requestConfig = RequestConfig.custom()
 					.setSocketTimeout(10000).setConnectTimeout(10000).build();

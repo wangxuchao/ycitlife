@@ -54,6 +54,11 @@ public class MenuManager {
 		btn21.setType("view");
 		btn21.setUrl(ValueUtil.PROJECT_ROOT);
 
+		ClickButton btn22 = new ClickButton();
+		btn22.setName("教务通知");
+		btn22.setType("click");
+		btn22.setKey("jwtz");
+
 		ViewButton btn31 = new ViewButton();
 		btn31.setName("社区交流");
 		btn31.setType("view");
@@ -71,7 +76,7 @@ public class MenuManager {
 
 		ComplexButton mainBtn2 = new ComplexButton();
 		mainBtn2.setName("移动校园");
-		mainBtn2.setSub_button(new BaseButton[] { btn21 });
+		mainBtn2.setSub_button(new BaseButton[] { btn21, btn22 });
 
 		ComplexButton mainBtn3 = new ComplexButton();
 		mainBtn3.setName("其他");

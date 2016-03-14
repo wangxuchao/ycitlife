@@ -1,7 +1,7 @@
-<%@page import="cn.wangxuchao.ycitz.util.ValueUtil"%>
+<%@ page import="cn.wangxuchao.ycitz.util.ValueUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,user-scalable=0">
-<title>${categoryTitle}| 生活在盐工</title>
+<title>${categoryTitle}|生活在盐工</title>
 <link rel="stylesheet"
 	href="<%=ValueUtil.PROJECT_ROOT%>css/weui.min.css?v=<%=ValueUtil.PROJECT_VERSION%>" />
 <link rel="stylesheet"
@@ -63,6 +63,8 @@
 	</div>
 	<script
 		src="<%=ValueUtil.PROJECT_ROOT%>js/jquery-2.2.0.min.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
+	<script
+		src="<%=ValueUtil.PROJECT_ROOT%>js/jquery.lazyload.min.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
 	<script
 		src="<%=ValueUtil.PROJECT_ROOT%>js/script.js?v=<%=ValueUtil.PROJECT_VERSION%>"></script>
 </body>

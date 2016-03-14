@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,user-scalable=0">
-<title>生活在盐工</title>
+<title>教务通知 | 生活在盐工</title>
 <link rel="stylesheet"
 	href="<%=ValueUtil.PROJECT_ROOT%>css/weui.min.css" />
 <link rel="stylesheet" href="<%=ValueUtil.PROJECT_ROOT%>css/style.css" />
@@ -43,14 +43,12 @@
 		</MARQUEE>
 	</div>
 	<div class="">
-		<!-- 学校要闻 -->
+		<!-- 教务通知 -->
 		<div class="weui_cells_title">
-			<h4>
-				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=28">学校要闻</a>
-			</h4>
+			<h4>教务通知</h4>
 		</div>
 		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
-			<c:forEach var="news" items="${indexNewsList}" begin="0" end="5">
+			<c:forEach var="news" items="${indexNewsList}">
 				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
 					<div class="weui_cell_bd weui_cell_primary news_title">
 						<c:out value="${news.newsName}" />
@@ -60,71 +58,6 @@
 					</div>
 				</a>
 			</c:forEach>
-			<a class="weui_panel_ft"
-				href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=28">查看更多</a>
-		</div>
-
-		<!-- 综合新闻 -->
-		<div class="weui_cells_title">
-			<h4>
-				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=30">综合新闻</a>
-			</h4>
-		</div>
-		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
-			<c:forEach var="news" items="${indexNewsList}" begin="6" end="11">
-				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
-					<div class="weui_cell_bd weui_cell_primary news_title">
-						<c:out value="${news.newsName}" />
-					</div>
-					<div class="weui_cell_ft news_time">
-						<c:out value="${news.pubTime}" />
-					</div>
-				</a>
-			</c:forEach>
-			<a class="weui_panel_ft"
-				href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=30">查看更多</a>
-		</div>
-
-		<!-- 通知通告 -->
-		<div class="weui_cells_title">
-			<h4>
-				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=35">通知通告</a>
-			</h4>
-		</div>
-		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
-			<c:forEach var="news" items="${indexNewsList}" begin="12" end="17">
-				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
-					<div class="weui_cell_bd weui_cell_primary news_title">
-						<c:out value="${news.newsName}" />
-					</div>
-					<div class="weui_cell_ft news_time">
-						<c:out value="${news.pubTime}" />
-					</div>
-				</a>
-			</c:forEach>
-			<a class="weui_panel_ft"
-				href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=35">查看更多</a>
-		</div>
-
-		<!-- 校外媒体 -->
-		<div class="weui_cells_title">
-			<h4>
-				<a href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=27">校外媒体</a>
-			</h4>
-		</div>
-		<div class="weui_cells weui_cells_access weui_panel weui_panel_access">
-			<c:forEach var="news" items="${indexNewsList}" begin="18" end="23">
-				<a class="weui_cell" href='<c:out value="${news.newsUrl}" />'>
-					<div class="weui_cell_bd weui_cell_primary news_title">
-						<c:out value="${news.newsName}" />
-					</div>
-					<div class="weui_cell_ft news_time">
-						<c:out value="${news.pubTime}" />
-					</div>
-				</a>
-			</c:forEach>
-			<a class="weui_panel_ft"
-				href="<%=ValueUtil.PROJECT_ROOT%>list?smallid=27">查看更多</a>
 		</div>
 
 		<div class="copy">&copy;2016&nbsp;生活在盐工</div>

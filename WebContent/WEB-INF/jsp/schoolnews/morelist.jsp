@@ -1,7 +1,7 @@
-<%@page import="cn.wangxuchao.ycitz.util.ValueUtil"%>
+<%@ page import="cn.wangxuchao.ycitz.util.ValueUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:forEach var="news" items="${schoolNewsList}">
